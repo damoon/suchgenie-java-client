@@ -6,7 +6,10 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -21,6 +24,8 @@ import com.google.api.client.http.HttpResponse;
 class ConnectionHandler
 {
 	private static final Logger logger = LoggerFactory.getLogger(ConnectionHandler.class);
+
+	private static final Executor EXECUTOR = new ThreadPoolExecutor(2, 32, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
 
 	private final HttpRequestFactory httpRequestFactory;
 
@@ -69,7 +74,7 @@ class ConnectionHandler
 		Collection<Future<HttpResponse>> futureHttpResponses = new LinkedList<>();
 		for (HttpRequest request : requests)
 		{
-			futureHttpResponses.add(request.executeAsync());
+			futureHttpResponses.add(request.executeAsync(EXECUTOR));
 		}
 
 		while (!futureHttpResponses.isEmpty())
