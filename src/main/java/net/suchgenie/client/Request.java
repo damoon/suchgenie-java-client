@@ -91,13 +91,13 @@ public class Request extends ConnectionEvent
 
 	public Request setDocumentsPerPage(int documentsPerPage)
 	{
-		defaultParameters.put("documentsPerPage", String.valueOf(documentsPerPage));
+		documentsParameters.put("documentsPerPage", String.valueOf(documentsPerPage));
 		return this;
 	}
 
 	public Request setPageNumber(int pageNumber)
 	{
-		defaultParameters.put("pageNumber", String.valueOf(pageNumber));
+		documentsParameters.put("pageNumber", String.valueOf(pageNumber));
 		return this;
 	}
 
