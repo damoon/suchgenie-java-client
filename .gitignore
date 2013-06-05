@@ -5,3 +5,4 @@ target/
 .springBeans
 logs/
 gitstats
+bin/

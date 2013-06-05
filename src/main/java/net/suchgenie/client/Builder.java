@@ -32,28 +32,24 @@ public class Builder
 		// just to force the creation by Client.build().(...).initiate();
 	}
 
-	@SuppressWarnings("hiding")
 	public Builder withDatabase(String database)
 	{
 		this.database = database;
 		return this;
 	}
 
-	@SuppressWarnings("hiding")
 	public Builder withConnectTimeout(int connectTimeout)
 	{
 		this.connectTimeout = connectTimeout;
 		return this;
 	}
 
-	@SuppressWarnings("hiding")
 	public Builder withReadTimeout(int readTimeout)
 	{
 		this.readTimeout = readTimeout;
 		return this;
 	}
 
-	@SuppressWarnings("hiding")
 	public Builder withAuthentication(String username, String password)
 	{
 		this.username = Preconditions.checkNotNull(username);
@@ -61,28 +57,24 @@ public class Builder
 		return this;
 	}
 
-	@SuppressWarnings("hiding")
 	public Builder withServerSelectionPolicy(ServerSelectionPolicy serverSelectionPolicy)
 	{
 		this.serverSelectionPolicy = serverSelectionPolicy;
 		return this;
 	}
 
-	@SuppressWarnings("hiding")
 	public Builder withUserIdFactory(UserIdFactory userIdFactory)
 	{
 		this.userIdFactory = userIdFactory;
 		return this;
 	}
 
-	@SuppressWarnings("hiding")
 	public Builder withHttpTransport(HttpTransport httpTransport)
 	{
 		this.httpTransport = httpTransport;
 		return this;
 	}
 
-	@SuppressWarnings("hiding")
 	public Builder withJsonFactory(JsonFactory jsonFactory)
 	{
 		this.jsonFactory = jsonFactory;
