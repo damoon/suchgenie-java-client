@@ -103,6 +103,75 @@ public class SuchgenieClientTest
 	}
 
 	@Test
+	public void documentIdentifiersAndNavigation() throws SuchgenieException
+	{
+		List<String> attributes = new LinkedList<>();
+		attributes.add("id");
+		attributes.add("word");
+		
+		DocumentIdentifiersAndNavigation documentIdentifiersAndNavigation = client
+				.createRequest()
+				.setQuery("sonne")
+				.getDocumentIdentifiersAndNavigation(attributes);
+
+		DocumentIdentifiers documentIdentifiers = documentIdentifiersAndNavigation.documentIdentifiers;
+		Navigation navigation = documentIdentifiersAndNavigation.navigation;
+		
+		assertEquals(2, documentIdentifiers.documentCount);
+		assertEquals(1, documentIdentifiers.pageCount);
+		assertEquals(1, documentIdentifiers.pageNumber);
+		assertEquals(10, documentIdentifiers.resultsPerPage);
+		assertEquals(2, documentIdentifiers.documentIdentifiers.size());
+		assertTrue(documentIdentifiers.documentIdentifiers.contains("1"));
+		assertTrue(documentIdentifiers.documentIdentifiers.contains("13"));
+
+		assertEquals(2, navigation.size());
+		assertEquals(2, navigation.get("id").size());
+		assertEquals(Integer.valueOf(1), navigation.get("id").get("1"));
+		assertEquals(Integer.valueOf(1), navigation.get("id").get("13"));
+		assertEquals(2, navigation.get("word").size());
+		assertEquals(Integer.valueOf(1), navigation.get("word").get("Sonnencreme"));
+		assertEquals(Integer.valueOf(1), navigation.get("word").get("Sonnensystem"));
+	}
+
+	@Test
+	public void documentsAndNavigation() throws SuchgenieException
+	{
+		List<String> documentAttributes = new LinkedList<>();
+		documentAttributes.add("id");
+		documentAttributes.add("word");
+		documentAttributes.add("results");
+
+		List<String> navigationAttributes = new LinkedList<>();
+		navigationAttributes.add("id");
+		navigationAttributes.add("word");
+		
+		DocumentsAndNavigation documentsAndNavigation = client
+				.createRequest()
+				.setQuery("sonne")
+				.getDocumentsAndNavigation(documentAttributes, navigationAttributes);
+
+		Documents documents = documentsAndNavigation.documents;
+		Navigation navigation = documentsAndNavigation.navigation;
+		
+		assertEquals(2, documents.documentCount);
+		assertEquals(1, documents.pageCount);
+		assertEquals(1, documents.pageNumber);
+		assertEquals(10, documents.resultsPerPage);
+		assertEquals(2, documents.documents.size());
+		assertEquals("1", documents.documents.get(0).get("id"));
+		assertEquals("13", documents.documents.get(1).get("id"));
+		
+		assertEquals(2, navigation.size());
+		assertEquals(2, navigation.get("id").size());
+		assertEquals(Integer.valueOf(1), navigation.get("id").get("1"));
+		assertEquals(Integer.valueOf(1), navigation.get("id").get("13"));
+		assertEquals(2, navigation.get("word").size());
+		assertEquals(Integer.valueOf(1), navigation.get("word").get("Sonnencreme"));
+		assertEquals(Integer.valueOf(1), navigation.get("word").get("Sonnensystem"));
+	}
+
+	@Test
 	public void logDocumentView() throws SuchgenieException
 	{
 		assertTrue(eventLogger.logDocumentView("documentIdentifier").successful);

@@ -4,7 +4,7 @@ import com.google.api.client.util.Joiner;
 
 public class SuchgenieClient
 {
-	static final String USER_AGENT = "suchgenie-java-client/1.0.0";
+	static final String USER_AGENT = "suchgenie-java-client/2.5.0";
 
 	static final Joiner commaJoiner = Joiner.on(',');
 

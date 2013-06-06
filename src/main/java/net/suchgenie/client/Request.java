@@ -12,6 +12,9 @@ public class Request extends ConnectionEvent
 {
 	private Map<String, String> defaultParameters = new HashMap<>();
 	private Map<String, String> documentsParameters = new HashMap<>();
+	private Map<String, String> sortings = new HashMap<>();
+	private Map<String, String> documentsSortings = new HashMap<>();
+	private Map<String, String> navigationSortings = new HashMap<>();
 
 	Request(ConnectionHandler requester, String userId)
 	{
@@ -56,6 +59,7 @@ public class Request extends ConnectionEvent
 		Map<String, String> params = getUserIdAndTimestamp();
 		params.putAll(defaultParameters);
 		params.putAll(documentsParameters);
+		params.putAll(sortings);
 		params.put("attributes", commaJoiner.join(attributes));
 		try
 		{
@@ -73,9 +77,50 @@ public class Request extends ConnectionEvent
 		Map<String, String> params = getUserIdAndTimestamp();
 		params.putAll(defaultParameters);
 		params.putAll(documentsParameters);
+		params.putAll(sortings);
 		try
 		{
 			return requester.executeParallelGetRequest("/api/documentIdentifiers.json", params).parseAs(DocumentIdentifiers.class);
+		}
+		catch (IOException e)
+		{
+			throw new SuchgenieException(e);
+		}
+	}
+
+	public DocumentsAndNavigation getDocumentsAndNavigation(Collection<String> documentAttributes, Collection<String> navigationAttributes) throws SuchgenieException
+	{
+		// query, documentsPerPage, pageNumber, comparators, filters, sortings,
+		// attributes
+		Map<String, String> params = getUserIdAndTimestamp();
+		params.putAll(defaultParameters);
+		params.putAll(documentsParameters);
+		params.putAll(documentsSortings);
+		params.putAll(navigationSortings);
+		params.put("documentAttributes", commaJoiner.join(documentAttributes));
+		params.put("navigationAttributes", commaJoiner.join(navigationAttributes));
+		try
+		{
+			return requester.executeParallelGetRequest("/api/documentsAndNavigation.json", params).parseAs(DocumentsAndNavigation.class);
+		}
+		catch (IOException e)
+		{
+			throw new SuchgenieException(e);
+		}
+	}
+
+	public DocumentIdentifiersAndNavigation getDocumentIdentifiersAndNavigation(Collection<String> attributes) throws SuchgenieException
+	{
+		// query, documentsPerPage, pageNumber, comparators, filters, sortings
+		Map<String, String> params = getUserIdAndTimestamp();
+		params.putAll(defaultParameters);
+		params.putAll(documentsParameters);
+		params.putAll(documentsSortings);
+		params.putAll(navigationSortings);
+		params.put("attributes", commaJoiner.join(attributes));
+		try
+		{
+			return requester.executeParallelGetRequest("/api/documentIdentifiersAndNavigation.json", params).parseAs(DocumentIdentifiersAndNavigation.class);
 		}
 		catch (IOException e)
 		{
@@ -109,7 +154,19 @@ public class Request extends ConnectionEvent
 
 	public Request setSorting(String attribute, Direction direction)
 	{
-		defaultParameters.put("sort" + attribute, direction.toString().toLowerCase());
+		sortings.put("sort" + attribute, direction.toString().toLowerCase());
+		return this;
+	}
+
+	public Request setDocumentsSorting(String attribute, Direction direction)
+	{
+		documentsSortings.put("sortDocuments" + attribute, direction.toString().toLowerCase());
+		return this;
+	}
+
+	public Request setNavigationSorting(String attribute, Direction direction)
+	{
+		navigationSortings.put("sortNavigation" + attribute, direction.toString().toLowerCase());
 		return this;
 	}
 
