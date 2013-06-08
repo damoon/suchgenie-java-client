@@ -22,7 +22,7 @@ public class SuchgenieClientTest
 	{
 		SuchgenieClient unauthorizedClient = SuchgenieClient
 				.builder()
-				.withDatabase("test")
+				.withDatabase("test-noip")
 				.build();
 		
 		unauthorizedClient
